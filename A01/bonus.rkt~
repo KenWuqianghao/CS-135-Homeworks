@@ -15,5 +15,3 @@
 
 (define (final-cs135-grade cp m1 m2 fe oa)
     (min (course_grade cp m1 m2 fe oa) (fail fe) (fail oa)))
-
-(final-cs135-grade 100 100 100 100 49)
