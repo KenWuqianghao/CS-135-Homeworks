@@ -1,10 +1,10 @@
-;; (can-donate-to/cond?) produce the predicted box office profits (as an Int) in millions
+;; (box-office-profits) produce the predicted box office profits (as an Int) in millions
 ;; Examples:
 (check-expect (box-office-profits "Thor: Love and Thunder" "Marvel" 4 50 ) 980)
 
 ;; box-office-profits: STR STR INT INT -> INT
-(define (box-office-profits movie studio actor_num explosion_num)
-    (+ (movie_bonus movie) (studio_bonus studio) (actor_bonus actor_num) (explosion_bonus explosion_num)))
+(define (box-office-profits movie studio actor explosion)
+    (+ (movie_bonus movie) (studio_bonus studio) (actor_bonus actor) (explosion_bonus explosion)))
 
 (define (movie_bonus movie)
     (cond 

@@ -1,7 +1,7 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname median) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
-;; (median-of-3) produce the median of a, b, and c
+;; (median-of-3-simple) produce the median of a, b, and c
 ;; Examples:
 (check-expect (median-of-3-simple 1 2 3) 2)
 (check-expect (median-of-3-simple 10 15 20) 15)
