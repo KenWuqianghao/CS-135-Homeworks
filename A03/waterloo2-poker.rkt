@@ -29,6 +29,9 @@
 (define straight_flush_hand
   (cons (cons 'J (cons 'H empty)) (cons (cons 10 (cons 'H empty)) empty)))
 
+(define pair_hand
+  (cons (cons 10 (cons 'H empty)) (cons (cons 10 (cons 'H empty)) empty)))
+
 ;; (ordinality card) produces the ordinality of a card
 ;; Examples
 (check-expect (ordinality (cons 'A (cons 'S empty))) 14)
@@ -42,6 +45,11 @@
     [(symbol=? (rank card) 'Q) 12]
     [(symbol=? (rank card) 'K) 13]
     [(symbol=? (rank card) 'A) 14]))
+
+;; Tests
+(check-expect (ordinality (cons 'Q (cons 'S empty))) 12)
+(check-expect (ordinality (cons 4 (cons 'D empty))) 4)
+(check-expect (ordinality (cons 10 (cons 'D empty))) 10)
 
 (define (straight_flush hand)
   (cond 
@@ -77,6 +85,10 @@
     [(flush hand) 1]
     [else 0]))
 
+;; Tests
+(check-expect (strength straight_flush_hand) 4)
+(check-expect (strength pair_hand) 3)
+
 ;; (hand<? hand_1 hand_2) produces true if hand_2 is stronger than hand_1, otherwise false
 ;; Examples
 (check-expect (hand<? flush_hand straight_hand) true)
@@ -86,8 +98,12 @@
 (define (hand<? hand_1 hand_2)
   (cond 
     [(> (strength hand_2) (strength hand_1)) true]
-    [(< (strength hand_2) (strength hand_1)) false]
-    [else 'tie]))
+    [else false]))
+
+;; Tests
+(check-expect (hand<? straight_hand flush_hand ) false)
+(check-expect (hand<? straight_flush_hand straight_hand) false)
+(check-expect (hand<? flush_hand flush_hand) false)
 
 ;; (winner hand_1 hand_2) produces the winner of the two hands
 ;; Examples
@@ -96,10 +112,15 @@
 (check-expect (winner straight_flush_hand straight_flush_hand) 'tie)
 ;; (winner hand_1 hand_2): Hand Hand -> Hand
 (define (winner hand_1 hand_2)
-  (cond
-    [(symbol? (hand<? hand_1 hand_2)) 'tie]
-    [(hand<? hand_2 hand_1) 'hand1]
-    [else 'hand2]))
+   (cond 
+    [(> (strength hand_2) (strength hand_1)) 'hand2]
+    [(< (strength hand_2) (strength hand_1)) 'hand1]
+    [else 'tie]))
+
+;; Tests
+(check-expect (winner flush_hand straight_hand) 'hand2)
+(check-expect (winner straight_flush_hand straight_hand) 'hand1)
+(check-expect (winner flush_hand flush_hand) 'tie)
 
 (define (valid_suit? suit)
     (cond
@@ -113,7 +134,8 @@
 
 (define (card_valid? card)
     (cond
-        [(and (valid_suit? (second card)) (valid_rank? (first card))) true]
+        [(and (valid_suit? (second card)) (valid_rank? (first card)) 
+        (= (length card) 2)) true]
         [else false]))
 
 (define (two_card_valid? card_1 card_2)
@@ -123,18 +145,21 @@
 
 (define (valid_card_list? hand)
     (cond
-        [(and (cons? (first hand)) (cons? (second hand)))
-        (two_card_valid? (first hand) (second hand))]
+        [(and (cons? (first hand)) (cons? (second hand))
+        (= (length hand) 2) (two_card_valid? (first hand) (second hand))) true]
         [else false]))
 
 ;; (valid_hand? hand) produces true if provided hand is a valid hand, otherwise false
 ;; Examples
 (check-expect (valid-hand? flush_hand) true)
 (check-expect (valid-hand? straight_hand) true)
-(check-expect (valid-hand? 0) false)
-(check-expect (valid-hand? "test") false)
 ;; (valid-hand? hand): Any -> Bool
 (define (valid-hand? hand)
     (cond
         [(cons? hand) (valid_card_list? hand)]
         [else false]))
+
+;; Tests
+(check-expect (valid-hand? '()) false)
+(check-expect (valid-hand? 0) false)
+(check-expect (valid-hand? "test") false)
