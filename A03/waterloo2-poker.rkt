@@ -146,7 +146,9 @@
 (define (valid_card_list? hand)
     (cond
         [(and (cons? (first hand)) (cons? (second hand))
-        (= (length hand) 2) (two_card_valid? (first hand) (second hand))) true]
+        (= (length hand) 2) (two_card_valid? (first hand) (second hand))
+        (not (and (= (ordinality(first hand)) (ordinality(second hand))) 
+        (= (suit (first hand)) (suit (second hand)))))) true]
         [else false]))
 
 ;; (valid_hand? hand) produces true if provided hand is a valid hand, otherwise false
