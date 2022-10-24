@@ -2,7 +2,7 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname sarcasm) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
 
-;; pair-listof-X-templat: LIST -> Any
+;; pair-listof-X-template: (listof-X) -> Any
 (define (pair-listof-X-template plox)
     (cond 
         [(empty? plox) ...]
