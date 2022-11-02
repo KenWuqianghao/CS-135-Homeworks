@@ -11,12 +11,6 @@
   (sel-sort (unsorted-union/acc s1 s2 s2)))
 
 ;; Tests
-(check-expect (union (list 2 3 4) (list 2 3 4)) (list 2 3 4))
-(check-expect (union empty (list 1 5 6)) (list 1 5 6))
-(check-expect (union (list 1 2 3) empty) (list 1 2 3))
-(check-expect (union empty empty) empty)
-(check-expect (union (list 1 2 3 4) (list 2 3 4)) (list 1 2 3 4))
-(check-expect (union (list 2 3 4) (list 1 2 3 4)) (list 1 2 3 4))
 
 (define (unsorted-union/acc s1 s2 unsorted-union)
   (cond
@@ -63,9 +57,3 @@
       [else (intersection (rest s1) s2)]))
 
 ;; Tests
-(check-expect (intersection (list 2 3 4) (list 2 3 4)) (list 2 3 4))
-(check-expect (intersection empty (list 1 5 6)) empty)
-(check-expect (intersection (list 1 2 3) empty) empty)
-(check-expect (intersection empty empty) empty)
-(check-expect (intersection (list 1 2 3 4) (list 2 3 4)) (list 2 3 4))
-(check-expect (intersection (list 2 3 4) (list 1 2 3 4)) (list 2 3 4))
