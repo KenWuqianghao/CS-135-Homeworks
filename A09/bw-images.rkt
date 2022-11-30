@@ -35,9 +35,19 @@
                 (0 0)))
 
 (define (invert image)
-  (...))
+  (map (lambda
+           (row) (map (lambda (pixel) (cond
+                                        [(= pixel 1) 0]
+                                        [(= pixel 0) 1]
+                                        [else empty]
+                                        )) row))image))
 
 ;; Tests:
+(check-expect (invert empty) empty)
+(check-expect (invert '((1 0 1)
+                (0 1 0)))
+              '((0 1 0)
+                (1 0 1)))
 
 ;; (reflect-x-axis image) consumes a 2D-Image and produces a
 ;;   2D-Image that represents the reflection of the 2D-Image
@@ -48,9 +58,15 @@
 (check-expect (reflect-x-axis simple-image) simple-image)
 
 (define (reflect-x-axis image)
-  (...))
+  (build-list (length image) (lambda (x)
+                               (list-ref image (- (sub1 (length image)) x)))))
 
 ;; Tests:
+(check-expect (reflect-x-axis empty) empty)
+(check-expect (reflect-x-axis '((1 0 1)
+                (0 1 0)))
+              '((0 1 0)
+                (1 0 1)))
 
 ;; (reflect-y-axis image) consumes a 2D-Image and produces a
 ;;   2D-Image that represents the reflection of the 2D-Image
@@ -61,9 +77,16 @@
 (check-expect (reflect-y-axis simple-image) simple-image)
 
 (define (reflect-y-axis image)
-  (...))
+  (map (lambda
+           (row) (build-list (length row) (lambda (x)
+                               (list-ref row (- (sub1 (length row)) x))))) image))
 
 ;; Tests:
+(check-expect (reflect-y-axis empty) empty)
+(check-expect (reflect-y-axis '((1 0 1)
+                (0 1 0)))
+              '((1 0 1)
+                (0 1 0)))
 
 ;; (transpose image) consumes a 2D-Image and produces a
 ;;   2D-Image that represents the transposed image
@@ -79,6 +102,18 @@
 (check-expect (transpose simple-image) simple-image)
 
 (define (transpose image)
-  (...))
+  (cond
+    [(empty? image) empty]
+    [else (build-list (length (first image))
+              (lambda (x)
+                (build-list (length image)
+                            (lambda (y)
+                              (list-ref (list-ref image y) x)))))]))
 
 ;; Tests:
+(check-expect (transpose empty) empty)
+(check-expect (transpose '((1 0 1)
+                (0 1 0)))
+              '((1 0)
+                (0 1)
+                (1 0)))
